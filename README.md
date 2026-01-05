@@ -29,7 +29,7 @@ Check out the live version here [Live Demo](https://kanban-system-one.vercel.app
 
 ## License
 
-MIT License © 2025 Dinesh Bajgain
+MIT License © 2026 Dinesh Bajgain
 
 
 ## Contact
