@@ -2,7 +2,14 @@ import "./App.css";
 import KanbanBoard from "./components/KanbanBoard";
 
 import { useState, useEffect } from "react";
-import { fetchTasks, createTaskApi, updateTaskApi, deleteTaskApi } from "./api";
+import {
+  fetchTasks,
+  createTaskApi,
+  updateTaskApi,
+  deleteTaskApi,
+  isBackendAvailable,
+  syncLocalTasksToBackend,
+} from "./api";
 
 export type Task = {
   id: string;
@@ -24,25 +31,41 @@ function App() {
 
   useEffect(() => {
     let mounted = true;
-    fetchTasks()
-      .then((tasks) => {
-        if (!mounted) return;
-        const next: Record<string, ColumnType> = {
-          todo: { id: "todo", title: "To Do", tasks: [] },
-          inprogress: { id: "inprogress", title: "In Progress", tasks: [] },
-          done: { id: "done", title: "Done", tasks: [] },
-        };
-        tasks.forEach((t) => {
-          const task: Task = { id: t.id, title: t.title };
-          if (!next[t.columnId])
-            next[t.columnId] = { id: t.columnId, title: t.columnId, tasks: [] };
-          next[t.columnId].tasks.push(task);
-        });
-        setColumns(next);
-      })
-      .catch((err) => console.error("Failed to load tasks from backend", err));
+    async function loadAndSync() {
+      // Try to sync local tasks if backend is available
+      if (await isBackendAvailable()) {
+        await syncLocalTasksToBackend();
+      }
+      fetchTasks()
+        .then((tasks) => {
+          if (!mounted) return;
+          const next: Record<string, ColumnType> = {
+            todo: { id: "todo", title: "To Do", tasks: [] },
+            inprogress: { id: "inprogress", title: "In Progress", tasks: [] },
+            done: { id: "done", title: "Done", tasks: [] },
+          };
+          tasks.forEach((t) => {
+            const task: Task = { id: t.id, title: t.title };
+            if (!next[t.columnId])
+              next[t.columnId] = {
+                id: t.columnId,
+                title: t.columnId,
+                tasks: [],
+              };
+            next[t.columnId].tasks.push(task);
+          });
+          setColumns(next);
+        })
+        .catch((err) =>
+          console.error("Failed to load tasks from backend/localStorage", err)
+        );
+    }
+    loadAndSync();
+    // Optionally, listen for backend reconnects and sync again
+    const interval = setInterval(loadAndSync, 10000); // every 10s
     return () => {
       mounted = false;
+      clearInterval(interval);
     };
   }, []);
 
