@@ -16,7 +16,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #a6e3e9;
+  background: #50686b;
 }
 
 .kanban-header {
@@ -62,15 +62,16 @@ body {
 
 .kanban-board {
   display: flex;
-  justify-content: center;
   align-items: flex-start;
+  justify-content: center;
   gap: 24px;
   padding: 24px;
   overflow-x: auto;
-  flex: 1;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 1600px;
+  flex: 1 1 0;
+  margin: 0;
+  width: 100vw;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .column-wrapper {
@@ -92,15 +93,15 @@ body {
 
 /* Color for each column header */
 .column-wrapper:nth-child(1) .column-header-box {
-  border-left-color: #ff6b35;
+  border-left-color: #18f300;
 }
 
 .column-wrapper:nth-child(2) .column-header-box {
-  border-left-color: #fdb833;
+  border-left-color: #f1a712;
 }
 
 .column-wrapper:nth-child(3) .column-header-box {
-  border-left-color: #333;
+  border-left-color: #ff0000;
 }
 
 .column-header-title {
@@ -122,6 +123,9 @@ body {
 
 .column {
   flex: 0 0 380px;
+  width: 380px;
+  min-width: 320px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   background: #242b2c;
@@ -130,7 +134,7 @@ body {
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   height: 600px;
-  max-height: 70vh;
+  min-height: 85vh;
 }
 
 .column-header {
@@ -207,6 +211,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  word-break: break-word;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .task-card:hover {
