@@ -36,8 +36,8 @@ MIT License © 2026 Dinesh Bajgain
 
 Feel free to reach out to me via [mail](mailto:dinesh.bazgain@gmail.com) or open an issue on GitHub!
 
+## Project Preview Image
+![Demo image of the project](public/images/demo.png)
+
 ### Happy coding and converting!!!
 ---
-
-
-
